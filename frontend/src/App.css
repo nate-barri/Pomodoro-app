@@ -847,3 +847,142 @@ h1, h2, h3, h4, p, button, input { font-family: var(--dynamic-font); }
   transform: translateY(10px); /* Subtle slide down while fading */
   cursor: none; /* Optional: hides cursor over these areas */
 }
+/* --- MOBILE & TABLET RESPONSIVENESS --- */
+
+@media screen and (max-width: 768px) {
+
+  /* 1. Global Layout Fixes */
+  .app-container {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    overflow: hidden; /* Keep hidden to prevent scroll bounce */
+  }
+
+  /* 2. Home View Adjustments */
+  .glass-panel {
+    width: 90%; /* Fluid width */
+    padding: 25px;
+    max-height: 80vh;
+    overflow-y: auto; /* Allow internal scrolling if content is tall */
+  }
+
+  .home-title {
+    font-size: 3rem; /* Smaller title */
+  }
+
+  /* 3. Ambient Card (Fix Absolute Positioning) */
+  .ambient-card {
+    width: 90%;
+    bottom: 120px; /* Move up slightly */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center alignment fix */
+    padding: 20px;
+  }
+  
+  .ambient-time {
+    font-size: 3.5rem;
+  }
+
+  /* 4. Focus View Adjustments */
+  .focus-container {
+    width: 90%;
+  }
+
+  .focus-timer-large {
+    font-size: 5.5rem; /* Shrink giant timer */
+    margin: 20px 0;
+  }
+  
+  .focus-tabs-container {
+    flex-wrap: wrap; /* Allow tabs to stack if needed */
+    justify-content: center;
+  }
+  
+  .focus-tab-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  /* 5. Music Panel & Quotes */
+  .quote-container {
+    top: 20px;
+    left: 20px;
+    right: 20px; /* Prevent text overflow */
+    max-width: 100%;
+  }
+
+  .quote-text {
+    font-size: 1.1rem;
+  }
+
+  .music-panel {
+    width: 90%;
+    left: 5%; /* Center it */
+    bottom: 100px;
+  }
+  
+  .playlist-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cols instead of 4 */
+  }
+
+  /* 6. Settings Sidebar */
+  .settings-sidebar {
+    width: 100%; /* Full screen sidebar on mobile */
+    max-width: 100%;
+  }
+
+  /* 7. Forest & Analytics */
+  .forest-container {
+    width: 95%;
+  }
+  
+  .forest-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Smaller trees */
+  }
+  
+  .bento-grid {
+    grid-template-columns: 1fr; /* Stack bento cards vertically */
+  }
+  
+  .bento-card.wide, .bento-card.tall {
+    grid-column: span 1; /* Reset spans */
+    grid-row: span 1;
+  }
+
+  /* 8. Bottom Dock - Make it smaller and centered */
+  .bottom-dock {
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 90%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .dock-pill {
+    padding: 4px;
+  }
+  
+  .dock-mode-btn, .dock-icon-btn, .music-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  /* 9. Settings Inputs */
+  .font-selector-grid {
+    grid-template-columns: 1fr; /* 1 column for fonts */
+  }
+  
+  /* Ensure Zen Mode hides properly */
+  .zen-ui.hidden {
+    transform: translateY(20px);
+  }
+}
+
+/* Very Small Phones (iPhone SE, etc.) */
+@media screen and (max-height: 700px) {
+  .focus-timer-large { font-size: 4.5rem; }
+  .home-title { font-size: 2.5rem; }
+  .ambient-card { bottom: 90px; }
+}
