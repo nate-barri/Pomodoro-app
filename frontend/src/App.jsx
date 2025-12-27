@@ -600,7 +600,7 @@ export default function App() {
         {/* VIEW: HOME */}
         {view === 'HOME' && (
              <div className="glass-panel">
-             <h1 className="home-title">HYPER FOCUS</h1>
+             <h1 className="home-title">Pomodoro App</h1>
              <div style={{ marginBottom: '20px' }}>
                 <SelectorTag label="Energy Level" selected={energy} onSelect={setEnergy} options={[{label:'Low', value:'LOW', icon:'🪫'}, {label:'Med', value:'MED', icon:'🔋'}, {label:'High', value:'HIGH', icon:'⚡'}]} />
                 <SelectorTag label="Task Difficulty" selected={difficulty} onSelect={setDifficulty} options={[{label:'Easy', value:'EASY', icon:'🃏'}, {label:'Med', value:'MED', icon:'⚖️'}, {label:'Hard', value:'HARD', icon:'🔥'}]} />

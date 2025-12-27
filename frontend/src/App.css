@@ -58,7 +58,7 @@ h1, h2, h3, h4, p, button, input { font-family: var(--dynamic-font); }
 .ambient-card {
   position: absolute; 
   bottom: 200px;        
-  left: 600px;      
+  left: 500px;      
   width: 300px;
   
   /* New Clear Glass Style */
