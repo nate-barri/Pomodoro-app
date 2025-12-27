@@ -986,3 +986,184 @@ h1, h2, h3, h4, p, button, input { font-family: var(--dynamic-font); }
   .home-title { font-size: 2.5rem; }
   .ambient-card { bottom: 90px; }
 }
+/* --- MOBILE RESPONSIVENESS (Add to bottom of App.css) --- */
+
+@media screen and (max-width: 768px) {
+
+  /* 1. Global Layout & Container */
+  .app-container {
+    height: 100vh;
+    height: 100dvh; /* Fixes mobile browser address bar scroll issue */
+    justify-content: flex-start; /* Aligns content to top to prevent cutting off */
+    padding-top: 80px; /* Space for the quote at the top */
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+    overflow-x: hidden;
+  }
+
+  /* 2. Fix Quote Overlapping Title */
+  .quote-container {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    width: 90%;
+    max-width: 100%;
+    text-align: center;
+    background: transparent;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .quote-text {
+    font-size: 1rem; /* Smaller text */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8); /* Better readability on bg */
+  }
+  
+  .quote-author {
+    font-size: 0.8rem;
+  }
+
+  /* 3. Main Glass Panel (Home View) */
+  .glass-panel {
+    width: 90%; /* Fluid width instead of 500px */
+    max-width: 400px;
+    margin: 0 auto 100px auto; /* Margin bottom for dock */
+    padding: 25px;
+  }
+
+  .home-title {
+    font-size: 2.5rem; /* Smaller title to fit screen */
+    margin-bottom: 15px;
+  }
+
+  /* 4. Ambient Card (Fix Absolute Position) */
+  .ambient-card {
+    position: relative; /* Remove absolute positioning */
+    bottom: auto;
+    left: auto;
+    width: 90%;
+    margin: 20px auto; /* Center it */
+    transform: none;
+  }
+
+  .ambient-time {
+    font-size: 3.5rem;
+  }
+
+  /* 5. Focus View */
+  .focus-container {
+    width: 90%;
+    margin-top: 20px;
+  }
+
+  .focus-timer-large {
+    font-size: 5rem; /* Fit timer on screen */
+    margin: 10px 0;
+  }
+
+  .focus-tabs-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .focus-tab-btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  /* Stack controls vertically if needed, or keep row but smaller */
+  .focus-controls-row {
+    gap: 10px;
+  }
+  
+  .btn-focus-main {
+    padding: 0 20px;
+    font-size: 1.2rem;
+    min-width: 140px;
+    height: 50px;
+  }
+
+  /* 6. Settings Sidebar */
+  .settings-sidebar {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+  
+  .font-selector-grid {
+    grid-template-columns: 1fr 1fr; /* Keep 2 cols but squeeze slightly */
+  }
+
+  /* 7. Analytics / Bento Grid */
+  .analytics-dashboard {
+    padding-right: 0;
+  }
+
+  .bento-grid {
+    grid-template-columns: 1fr; /* Stack cards vertically */
+    grid-auto-rows: auto;
+  }
+
+  .bento-card.wide, .bento-card.tall {
+    grid-column: span 1; /* Make full width */
+    grid-row: auto;
+  }
+  
+  .bento-value {
+    font-size: 1.8rem;
+  }
+  
+  /* 8. Forest Grid */
+  .forest-container {
+    width: 95%;
+  }
+  
+  .forest-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+
+  /* 9. Bottom Dock */
+  .bottom-dock {
+    width: 95%;
+    bottom: 15px;
+    right: 50%;
+    transform: translateX(50%); /* Center the dock */
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.5); /* Add background for visibility */
+    border-radius: 30px;
+    padding: 10px;
+    backdrop-filter: blur(10px);
+  }
+
+  .dock-pill {
+    padding: 4px;
+  }
+
+  /* 10. Music Panel */
+  .music-panel {
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    bottom: 90px; /* Above the dock */
+  }
+  
+  .music-panel.active {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .playlist-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cols */
+  }
+  
+  /* Hide Zen UI elements when fading to prevent accidental clicks */
+  .zen-ui.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Adjust inputs for touch targets */
+  .selector-btn, .font-btn {
+    padding: 12px;
+  }
+}
