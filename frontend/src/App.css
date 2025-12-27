@@ -833,3 +833,17 @@ h1, h2, h3, h4, p, button, input { font-family: var(--dynamic-font); }
   border-color: white;
   box-shadow: 0 0 10px rgba(189, 0, 255, 0.5);
 }
+
+/* 23. ZEN MODE ANIMATION */
+.zen-ui {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zen-ui.hidden {
+  opacity: 0;
+  pointer-events: none; /* Prevents clicking invisible buttons */
+  transform: translateY(10px); /* Subtle slide down while fading */
+  cursor: none; /* Optional: hides cursor over these areas */
+}

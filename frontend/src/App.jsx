@@ -87,6 +87,10 @@ export default function App() {
   const [trees, setTrees] = useState([]); 
   const [currentQuote, setCurrentQuote] = useState({ quote: "Loading...", author: "" });
   
+  // --- ZEN MODE STATE ---
+  const [userActive, setUserActive] = useState(true);
+  const inputTimeoutRef = useRef(null);
+
   const alarmAudio = useRef(typeof Audio !== "undefined" ? new Audio(ALARM_URL) : null);
   const canvasRef = useRef(null); 
   const videoRef = useRef(null);  
@@ -117,6 +121,40 @@ export default function App() {
     };
     initData();
   }, []);
+
+  // --- ZEN MODE / AUTO-HIDE LOGIC ---
+  useEffect(() => {
+    const handleActivity = () => {
+      setUserActive(true);
+      
+      // Clear existing timer
+      if (inputTimeoutRef.current) clearTimeout(inputTimeoutRef.current);
+
+      // Only set timer to hide if: 
+      // 1. We are in FOCUS view 
+      // 2. The timer is RUNNING (isActive)
+      if (view === 'FOCUS' && isActive) {
+        inputTimeoutRef.current = setTimeout(() => {
+          setUserActive(false);
+        }, 3000); // Hides after 3 seconds of no movement
+      }
+    };
+
+    // Listen for mouse or clicks
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('click', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+
+    // Initial trigger
+    handleActivity();
+
+    return () => {
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('click', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      if (inputTimeoutRef.current) clearTimeout(inputTimeoutRef.current);
+    };
+  }, [view, isActive]); 
 
   // --- VANTA.JS EFFECT FOR AMBIENT MODE ---
   useEffect(() => {
@@ -604,33 +642,40 @@ export default function App() {
           </div>
         )}
 
-        {/* VIEW: FOCUS */}
+        {/* VIEW: FOCUS (UPDATED FOR ZEN MODE) */}
         {view === 'FOCUS' && (
             <div className="focus-container">
-                <button className="btn-text-priority" onClick={() => setShowPriorities(!showPriorities)}>Focus Priorities ▾</button>
-                {showPriorities && (
-                    <div className="priority-popup">
-                        {priorities.map((p) => (
-                            <div key={p.id} className="priority-item">
-                                <input type="checkbox" className="priority-checkbox" checked={p.done} onChange={() => togglePriority(p.id)} />
-                                <input type="text" className="priority-input" defaultValue={p.text} style={{textDecoration: p.done ? 'line-through' : 'none', color: p.done ? '#666' : 'white'}} />
-                            </div>
-                        ))}
-                        <button style={{background:'none', border:'none', color:'#888', fontSize:'0.8rem', cursor:'pointer'}} onClick={() => setPriorities([...priorities, {id: Date.now(), text: 'New Task', done: false}])}>+ Add Task</button>
+                {/* Top Controls with Zen Fade */}
+                <div className={`zen-ui ${view === 'FOCUS' && !userActive && isActive ? 'hidden' : ''}`} style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                    <button className="btn-text-priority" onClick={() => setShowPriorities(!showPriorities)}>Focus Priorities ▾</button>
+                    {showPriorities && (
+                        <div className="priority-popup">
+                            {priorities.map((p) => (
+                                <div key={p.id} className="priority-item">
+                                    <input type="checkbox" className="priority-checkbox" checked={p.done} onChange={() => togglePriority(p.id)} />
+                                    <input type="text" className="priority-input" defaultValue={p.text} style={{textDecoration: p.done ? 'line-through' : 'none', color: p.done ? '#666' : 'white'}} />
+                                </div>
+                            ))}
+                            <button style={{background:'none', border:'none', color:'#888', fontSize:'0.8rem', cursor:'pointer'}} onClick={() => setPriorities([...priorities, {id: Date.now(), text: 'New Task', done: false}])}>+ Add Task</button>
+                        </div>
+                    )}
+                    <div className="focus-tabs-container">
+                        <button className={`focus-tab-btn ${focusTab === 'WORK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('WORK')}>Focus</button>
+                        <button className={`focus-tab-btn ${focusTab === 'SHORT_BREAK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('SHORT_BREAK')}>Short Break</button>
+                        <button className={`focus-tab-btn ${focusTab === 'LONG_BREAK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('LONG_BREAK')}>Long Break</button>
                     </div>
-                )}
-                <div className="focus-tabs-container">
-                    <button className={`focus-tab-btn ${focusTab === 'WORK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('WORK')}>Focus</button>
-                    <button className={`focus-tab-btn ${focusTab === 'SHORT_BREAK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('SHORT_BREAK')}>Short Break</button>
-                    <button className={`focus-tab-btn ${focusTab === 'LONG_BREAK' ? 'active' : ''}`} onClick={() => handleFocusTabChange('LONG_BREAK')}>Long Break</button>
                 </div>
+
+                {/* TIMER ALWAYS VISIBLE */}
                 <div className="focus-timer-large">{getDisplayTime()}</div>
-                <div className="focus-controls-row">
+
+                {/* Bottom Controls with Zen Fade */}
+                <div className={`focus-controls-row zen-ui ${view === 'FOCUS' && !userActive && isActive ? 'hidden' : ''}`}>
                     <button className="btn-icon-round" onClick={handleReset} title="Reset">↻</button>
                     <button className="btn-focus-main" onClick={() => setIsActive(!isActive)}>{isActive ? 'PAUSE' : 'START'}</button>
                     <button className="btn-icon-round" onClick={handlePin} title="Pin Up">📌</button>
                 </div>
-                {focusTab === 'WORK' && <button style={{marginTop: '20px', background:'none', border:'none', color:'#666', cursor:'pointer'}} onClick={finishWorkAndCalcBreak}>End Session</button>}
+                {focusTab === 'WORK' && <button className={`zen-ui ${view === 'FOCUS' && !userActive && isActive ? 'hidden' : ''}`} style={{marginTop: '20px', background:'none', border:'none', color:'#666', cursor:'pointer'}} onClick={finishWorkAndCalcBreak}>End Session</button>}
           </div>
         )}
         
@@ -659,7 +704,7 @@ export default function App() {
         )}
       </div>
 
-      {/* 3. WIDGETS */}
+      {/* 3. WIDGETS (Music & Quotes) - Apply Zen Mode to Music */}
       <div style={{ position: 'absolute', top: '40px', left: '40px', zIndex: 90 }}>
         <div className="quote-container">
           <div className="quote-text">"{currentQuote.quote}"</div>
@@ -667,13 +712,13 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: '40px', left: '40px', zIndex: 90, display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <div className={`zen-ui ${view === 'FOCUS' && !userActive && isActive ? 'hidden' : ''}`} style={{ position: 'absolute', bottom: '40px', left: '40px', zIndex: 90, display: 'flex', flexDirection: 'column', gap: '15px' }}>
         {renderMusicPanel()}
         <button className={`music-toggle-btn ${showMusic ? 'active' : ''}`} onClick={() => setShowMusic(!showMusic)} title="Music Player">🎵</button>
       </div>
 
-      {/* 4. THE DOCK */}
-      <div className="bottom-dock">
+      {/* 4. THE DOCK (Apply Zen Mode) */}
+      <div className={`bottom-dock zen-ui ${view === 'FOCUS' && !userActive && isActive ? 'hidden' : ''}`}>
         <div className="dock-pill">
           <button className={`dock-mode-btn ${view === 'AMBIENT' ? 'active' : ''}`} onClick={() => { setView('AMBIENT'); if(mode==='HOME') setupAmbientBreak(); }} title="Ambient Mode">🍃</button>
           <button className={`dock-mode-btn ${view === 'HOME' ? 'active' : ''}`} onClick={() => setView('HOME')} title="Home">🏠</button>
