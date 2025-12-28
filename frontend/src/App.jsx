@@ -739,7 +739,7 @@ export default function App() {
           value={noteInput}
           onChange={(e) => setNoteInput(e.target.value)}
         />
-        <button className="btn-save-note" onClick={saveNote}>Save to Calendar</button>
+        <button className="btn-save-note" onClick={saveNote}>Save </button>
       </div>
 
       {/* --- WIDGET CONTROLS (Bottom Left) --- */}
